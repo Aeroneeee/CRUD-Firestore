@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.9.3/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.9.3/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.9.3/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.9.3/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.9.3/firebase-storage.js"></script>
+    <script defer src="/__/firebase/7.9.3/firebase-firestore.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    <script src="scripts.js"></script>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Thesis Compendium</h1>
+    
+    <div class="form-buttons">
+      <button id="add-btn" class="a-btn--filled">Add</button>
+    </div>
+    
+    <div id="myModal" class="modal">
+
+      <div class="modal-content" id="main">
+        <span class="close">&times;</span>
+        
+        <h2>Insert new data</h2>
+        
+        <div class="form-field">
+          <label for="fieldMonth" class="label--required">Month</label>
+          <section>
+              <input id="fieldMonth" required type="text" placeholder="March" />
+          </section>
+        </div>
+
+        <div class="form-field">
+          <label for="fieldYear" class="label--required">Year</label>
+          <section>
+              <input id="fieldYear" required type="number" placeholder="2020" />
+          </section>
+        </div>
+
+        <div class="form-field">
+          <label for="fieldTitle" class="label--required">Title</label>
+          <section>
+              <input id="fieldTitle" required type="text" placeholder="Thesis title" />
+          </section>
+        </div>
+
+        <div class="form-field">
+          <label for="fieldAuthors" class="label--required">Authors</label>
+          <section>
+              <input id="fieldAuthors" required type="text" placeholder="Names of the Authors" />
+          </section>
+        </div>
+
+        <div class="form-field">
+          <label for="fieldAdviser" class="label--required">Adviser</label>
+          <section>
+              <input id="fieldAdviser" required type="text" placeholder="Names of the Adviser" />
+          </section>
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit" class="a-btn--filled" id="submit">Submit</button>
+          <button class="a-btn">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table id="table-list"></table>
+    </div>
+
+    <br><br><br>
+
+    <div class="form-field">
+      <section>
+          <input id="search-title" required type="text" placeholder="Search for title" />
+      </section>
+      <button id="search-btn">Search</button>
+    </div>
+
+    <div style="overflow-x:auto; visibility: hidden;">
+      <table id="table-search"></table>
+    </div>
+  </body>
+</html>
