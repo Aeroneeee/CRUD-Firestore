@@ -179,112 +179,124 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         }
     }
-
+    document.addEventListener('keypress', function (e){
+        if (e.key === 'Enter') {
+            searchBtn.click();
+        }
+    });
     searchBtn.onclick = () => {
-        console.log("shet");
         searchList.style.visibility = "visible";
         searchList.innerHTML = "loading...";
         searchBtn.disabled = true;
-        db.collection("items").where("title", "==", searchTitle.value)
-          .get()
+        db.collection("items").orderBy("datecreated").get()
           .then(querySnapshot => {
             searchList.innerHTML = "<tr><th>Month</th><th>Year</th><th>Title</th><th>Authors</th><th>Adviser</th> <th>Date Added</th> <th>Modify</th></tr>";
 
             searchBtn.innerHTML = "Search";
             searchBtn.disabled = false;
             
+            let titleSearchRaw = searchTitle.value;
+            let titleSearch = titleSearchRaw.toLowerCase();
+
             querySnapshot.forEach(doc => {
-        
-                let newItem = document.createElement("tr");
 
-                let monthTD = document.createElement("td");
-                let yearTD = document.createElement("td");
-                let titleTD = document.createElement("td");
-                let authorsTD = document.createElement("td");
-                let adviserTD = document.createElement("td");
-                let dateTD = document.createElement("td");
-                let modifyTD = document.createElement("td");
+                let titleStrRaw = doc.data().title;
+                let titleStr = titleStrRaw.toLowerCase();
 
-                let monthtxt = document.createTextNode(doc.data().month);
-                let yeartxt = document.createTextNode(doc.data().year);
-                let titletxt = document.createTextNode(doc.data().title);
-                let authorstxt = document.createTextNode(doc.data().authors);
-                let advisertxt = document.createTextNode(doc.data().adviser);
-                let datetxt = document.createTextNode(doc.data().date);
+                let str_pos = titleStr.indexOf(titleSearch);
 
-                monthTD.appendChild(monthtxt);
-                yearTD.appendChild(yeartxt);
-                titleTD.appendChild(titletxt);
-                authorsTD.appendChild(authorstxt);
-                adviserTD.appendChild(advisertxt);
-                dateTD.appendChild(datetxt);
-
-                newItem.appendChild(monthTD);
-                newItem.appendChild(yearTD);
-                newItem.appendChild(titleTD);
-                newItem.appendChild(authorsTD);
-                newItem.appendChild(adviserTD);
-                newItem.appendChild(dateTD);
-
-                let deleteNode = document.createElement("button");
-                deleteNode.innerHTML = "Remove";
-                deleteNode.classList.add("a-btn");
-                deleteNode.onclick = () => {
-                    newItem.innerHTML = "Removing...";
-                    db.collection("items")
-                        .doc(doc.id)
-                        .delete()
-                        .then(() => {
-                            loadItems();
-                        });
-                    return false;
-                };
-
-                modifyTD.appendChild(deleteNode);
-
-                let saveNode = document.createElement("button");
-                saveNode.innerHTML = "Save";
-                saveNode.classList.add("a-btn");
-                saveNode.onclick = () => {
-                    newItem.contentEditable = false;
-
-                    let monthNew = monthTD.firstChild.nodeValue;
-                    let yearNew = yearTD.firstChild.nodeValue;
-                    let titleNew = titleTD.firstChild.nodeValue;
-                    let authorsNew = authorsTD.firstChild.nodeValue;
-                    let adviserNew = adviserTD.firstChild.nodeValue;
-
-                    db.collection("items").doc(doc.id)
-                        .update({
-                            month: monthNew,
-                            year: yearNew,
-                            title: titleNew,
-                            authors: authorsNew,
-                            adviser: adviserNew,
-                            datecreated: new Date().getTime()
-                        })
-                        .then(() => {
-                            loadItems();
-                        });
-                    return false;
-                };
-
-                let editNode = document.createElement("button");
-                editNode.innerHTML = "Edit";
-                editNode.classList.add("a-btn");
-                editNode.onclick = () => {
-                    modifyTD.appendChild(saveNode);
-                    newItem.contentEditable = true;
+                if (str_pos > -1){
                     
-                    return false;
-                };
+                    let newItem = document.createElement("tr");
 
-                modifyTD.appendChild(editNode);
+                    let monthTD = document.createElement("td");
+                    let yearTD = document.createElement("td");
+                    let titleTD = document.createElement("td");
+                    let authorsTD = document.createElement("td");
+                    let adviserTD = document.createElement("td");
+                    let dateTD = document.createElement("td");
+                    let modifyTD = document.createElement("td");
+
+                    let monthtxt = document.createTextNode(doc.data().month);
+                    let yeartxt = document.createTextNode(doc.data().year);
+                    let titletxt = document.createTextNode(doc.data().title);
+                    let authorstxt = document.createTextNode(doc.data().authors);
+                    let advisertxt = document.createTextNode(doc.data().adviser);
+                    let datetxt = document.createTextNode(doc.data().date);
+
+                    monthTD.appendChild(monthtxt);
+                    yearTD.appendChild(yeartxt);
+                    titleTD.appendChild(titletxt);
+                    authorsTD.appendChild(authorstxt);
+                    adviserTD.appendChild(advisertxt);
+                    dateTD.appendChild(datetxt);
+
+                    newItem.appendChild(monthTD);
+                    newItem.appendChild(yearTD);
+                    newItem.appendChild(titleTD);
+                    newItem.appendChild(authorsTD);
+                    newItem.appendChild(adviserTD);
+                    newItem.appendChild(dateTD);
+
+                    let deleteNode = document.createElement("button");
+                    deleteNode.innerHTML = "Remove";
+                    deleteNode.classList.add("a-btn");
+                    deleteNode.onclick = () => {
+                        newItem.innerHTML = "Removing...";
+                        db.collection("items")
+                            .doc(doc.id)
+                            .delete()
+                            .then(() => {
+                                loadItems();
+                            });
+                        return false;
+                    };
+
+                    modifyTD.appendChild(deleteNode);
+
+                    let saveNode = document.createElement("button");
+                    saveNode.innerHTML = "Save";
+                    saveNode.classList.add("a-btn");
+                    saveNode.onclick = () => {
+                        newItem.contentEditable = false;
+
+                        let monthNew = monthTD.firstChild.nodeValue;
+                        let yearNew = yearTD.firstChild.nodeValue;
+                        let titleNew = titleTD.firstChild.nodeValue;
+                        let authorsNew = authorsTD.firstChild.nodeValue;
+                        let adviserNew = adviserTD.firstChild.nodeValue;
+
+                        db.collection("items").doc(doc.id)
+                            .update({
+                                month: monthNew,
+                                year: yearNew,
+                                title: titleNew,
+                                authors: authorsNew,
+                                adviser: adviserNew,
+                                datecreated: new Date().getTime()
+                            })
+                            .then(() => {
+                                loadItems();
+                            });
+                        return false;
+                    };
+
+                    let editNode = document.createElement("button");
+                    editNode.innerHTML = "Edit";
+                    editNode.classList.add("a-btn");
+                    editNode.onclick = () => {
+                        modifyTD.appendChild(saveNode);
+                        newItem.contentEditable = true;
+                        
+                        return false;
+                    };
+
+                    modifyTD.appendChild(editNode);
                 
-                newItem.appendChild(modifyTD);
+                    newItem.appendChild(modifyTD);
 
-                searchList.appendChild(newItem);
-
+                    searchList.appendChild(newItem);
+                }
             });
         });
     }
